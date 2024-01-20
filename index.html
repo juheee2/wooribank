@@ -5,41 +5,784 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/fonts.css">
+  <!-- <link rel="stylesheet" href="css/fonts.css"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/swiper-bundle.min.css">
   <title>우리은행</title>
   <style>
     :root{
       --main-color:#0082cd;
+      --sub-color:#0067ac;
+      --color-fff:#fff;
+      --color-666:#333;
+
+      font-family:'Noto Serif KR';
+      font-weight:400;
+      font-size:14px;
+      color:var(--color-666);
+      line-height:1.2;
     }
+    #wrap{
+      overflow:hidden;
+    }
+    .container{
+      max-width:1280px;
+      margin:0 auto;
+      padding:0 80px;
+    }
+    .header{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:1000;
+      background:var(--color-fff);
+      box-shadow:0 2px 10px -2px #666;
+    }
+    .header h1{
+      display:none;
+    }
+    .header .all-menu{
+      display:none;
+      position:fixed;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      z-index:99999;
+    }
+    .header .all-menu.active{
+      display:block;
+    }
+    .header .all-nav{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      padding:20px 60px;
+      background:var(--color-fff);
+    }
+    .all-menu .menu-close{
+      width:20px;
+      margin-left:20px;
+      margin-bottom:20px;
+      cursor:pointer;
+    }
+    .all-menu .main-nav{
+      position:relative;
+      padding:18px;
+      cursor:pointer;
+      border-bottom:1px solid #dddddd;
+    }
+    .main-nav.on>span{
+      font-weight:600;
+      color:var(--main-color); 
+    }
+    .arrow-wrap{
+      position:absolute;
+      top:50%;
+      right:20px;
+      transform:translate(0, -50%);
+      font-size:25px;
+    }
+    .main-nav .arrow-top,
+    .main-nav.on .arrow-bottom{
+      display:none;
+    }
+    .main-nav.on .arrow-top,
+    .main-nav .arrow-bottom{
+      display:block;
+    }
+    .sub-nav{
+      display:none;
+      overflow:hidden;
+      font-size:12px;
+      background-color:#f4f4f2;
+      padding:14px 30px;
+      line-height:1.8;
+      cursor:pointer;
+    }
+    .sub-nav span:hover{
+      text-decoration:underline;
+    }
+    .last-sub-nav{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+    }
+    .all-menu .box{
+      display:flex;
+      padding-top:40px;
+    }
+    .box .login-box,
+    .box .certification-box{
+      padding:20px;
+      width:50%;
+      text-align:center;
+      cursor:pointer;
+    }
+    .box .login-box{
+      background:var(--main-color);
+      color:var(--color-fff);
+      margin-right:40px;
+    }
+    .box .certification-box{
+      background:#999;
+      color:var(--color-fff);
+    }
+    .h-top{
+      position:relative;
+      padding:15px 0;
+    }
+    .h-top .center{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      justify-items:center;
+      align-items:center;
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:980px;
+      z-index:500;
+    }
+    .h-top .center>ul{
+      display:grid;
+      grid-template-columns:auto auto;
+      gap:50px;
+    }
+    .h-top .side{
+      display:grid;
+      grid-template-columns:auto auto;
+      justify-content:space-between;
+      align-items:center;
+      position:relative;
+    }
+    .h-top .logo-box{
+      width:80px;
+    }
+    .h-top .menu-open,
+    .h-top .btn-lang{
+      width:20px;
+      height:20px;
+    }
+    .h-top .lang-box.active{
+      display:block;
+    }
+    .h-top .lang-box{
+      display:none;
+      position:fixed;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      background:rgba(255,255,255,0.5);
+    }
+    .lang-box .box{
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:10px;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:400px;
+      padding:20px;
+      background:var(--color-fff);
+    }
+    .lang-box .box button{
+      justify-self:end;
+      margin-bottom:20px;
+      background:transparent;
+      border:none;
+      cursor:pointer;
+    }
+    .lang-box .box select{
+      padding:5px 0;
+    }
+    .lang-box .box input{
+      padding:10px;
+      background:var(--main-color);
+      border:none;
+      cursor:pointer;
+    }
+    /* .h-bottom{
+      position:absolute;
+      top:50px;
+      left:0;
+      right:0;
+      z-index:400;
+    } */
+    .h-bottom>ul{
+      display:flex;
+      flex-direction:row;
+      justify-content:space-between;
+      background:var(--main-color);
+      color:var(--color-fff);
+      padding:6px 150px;
+      font-size:12px;
+    }
+    .sec01 .video-box{
+      position:relative;
+    }
+    .sec01 .video-box video{
+      height:460px;
+      object-fit:cover;
+    }
+    .sec01 .video-control{
+      position:absolute;
+      right:10px;
+      bottom:10px;
+    }
+    .sec01 .video-control button{
+      cursor:pointer;
+      font-size:12px;
+    }
+    .sec01 .video-control button:hover{
+      opacity:70%;
+    }
+    #btn-video{
+      margin-right:10px;
+    }
+    .sec02{
+      background:var(--main-color);
+    }
+    .sec02 .search{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:10px 0;
+    }
+    .sec02 .search input{
+      width:900px;
+      border:none;
+      border-bottom:1px solid #000;
+      border-radius:30px;
+      padding:5px 30px;
+      margin-right:15px;
+      font-family:'Noto Serif KR';
+    }
+    .sec02 .search img{
+      width:20px;
+      cursor:pointer;
+    }
+    .sec03 .container{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:40px;
+      padding-top:40px;
+      padding-bottom:120px;
+    }
+    .sec03 article{
+      padding-bottom:20px;
+    }
+    .sec03 .event .art{
+      display:grid;
+    }
+    .sec03 .event .img-box,
+    .sec03 .event .txt-box{
+      grid-area:1/1/2/2;
+    }
+    .sec03 .event .art .txt-box{
+      display:none;
+      background:rgba(0,103,172,0.9);
+      color:var(--color-fff);
+      font-size:18px;
+      position:relative;
+    }
+    .sec03 .event .art .txt-box p{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translateX(-50%);
+    }
+    .sec03 .event .art:hover .txt-box{
+      display:block;
+    }
+    .sec03 .event{
+      position:relative;
+    }
+    .event .swiper{
+      position:absolute;
+      width:100%;
+    }
+    .event .swiper-pagination{
+      bottom:22px;
+    }
+    .sec03 .news .art-txt p:first-child{
+      float:left;
+      width:320px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      cursor:pointer;
+    }
+    .sec03 .news .art-txt p:last-child{
+      float:right;
+    }
+    h2{
+      font-size:16px;
+      font-weight:600;
+      padding-bottom:20px;
+    }
+    .sec04{
+      color:var(--color-fff);
+      background:var(--sub-color);
+    }
+    .sec04 .container,
+    .sec05 .container,
+    .footer .container{
+      padding-top:40px;
+      padding-bottom:80px;
+    }
+    .sec04 .product{
+      display:grid;
+      grid-template-columns:repeat(8,1fr);
+      gap:10px;
+      justify-items:center;
+      align-items:center;
+      }
+    .sec04 .product .img-box{
+      position:relative;
+      cursor:pointer;
+    }
+    .sec04 .product .img-box:hover img{
+      transform:scale(1.2);
+    }
+    .sec04 .product .img-box img{
+      width:60px;
+      height:60px;
+    }
+    .sec04 .product .img-box p{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:-30px;
+    }
+    .sec05{
+      color:var(--color-fff);
+      background:var(--main-color);
+      line-height:1.5;
+    }
+    .sec05 .container .service{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:35px;
+    }
+    .sec05 .service .img-box{
+      padding-bottom:20px;
+      cursor:pointer;
+    }
+    .sec05 .service .img-box:hover img{
+      box-shadow:5px 3px 10px #333;
+    }
+    .sec05 .service .img-box img{
+      border-radius:30px;
+    }
+    .sec05 .service h3{
+      margin-bottom:10px;
+    }
+    aside{
+      position:fixed;
+      right:10px;
+      bottom:50px;
+    }
+    aside .img-box{
+      width:30px;
+      cursor:pointer;
+    }
+    .footer{
+      /* color:var(--color-fff ); */
+      /* background:var(--sub-color); */
+    }
+    .footer .container{
+      display:grid;
+      grid-template-columns:1fr 1fr 2fr;
+      gap:40px;
+    }
+    .f-left .logo-box img{
+      width:90px;
+    }
+    .f-left .awards-box{
+      width:20px;
+      display:flex;
+      gap:2px;
+    }
+    .f-left .img-box{
+      display:inline-flex;
+      align-items:center;
+      padding-bottom:20px;
+      gap:6px;
+    }
+    .f-left p{
+      font-size:19px;
+    }
+    .f-center .sns ul{
+      display:flex;
+      gap:10px;
+      padding-bottom:20px;
+    }
+    .f-center .sns img{
+      width:25px;
+    }
+    .f-center .family-site select{
+      border-top:none;
+      border-left:none;
+      border-right:none;
+      padding:5px;
+      width:165px;
+    }
+    .f-center .family-site option:first-child{
+      color:#999;
+    }
+    .f-right .link-txt ul{
+      display:flex;
+      flex-flow:row wrap;
+      gap:5px 10px;
+      font-size:12px;
+    }
+    .f-right p{
+      font-size:10px;
+    }
+
+    @media (max-width:1000px){
+      .h-top .center{
+        width:780px;
+      }
+    }
+
+    @media (max-width:960px){
+      .container{
+        padding:0 30px;
+        width:100%;
+      }
+      .header .all-nav{
+        padding:20px 40px;
+      }
+      .box .login-box,
+      .box .certification-box{
+        padding:15px;
+      }
+      .h-top .center{
+        width:750px;
+      }
+      .h-top .center>ul{
+        gap:50px;
+      }
+      .h-bottom>ul{
+        padding:6px 100px;
+      }
+      .sec03 .news .art-txt p:first-child{
+        width:260px;
+      }
+    }
+
+    @media (max-width:768px){
+      .container{
+        padding:0 20px;
+        width:100%;
+      }
+      .all-menu .menu-close{
+        position:relative;
+        left:95%;
+      }
+      .h-top .center{
+        width:100px;
+        left:0;
+        transform:none;
+      }
+      .h-top .center>ul{
+        display:none;
+      }
+      .h-top .center{
+        float:left;
+        justify-items:left;
+      }
+      .h-top .side{
+        float:right;
+        display:flex;
+        flex-direction:row-reverse;
+      }
+      .h-top .side .btn-lang{
+        margin-right:20px;
+      }
+      .h-bottom>ul{
+        padding:6px 60px;
+      }
+      .sec03 .container{
+        padding-bottom:60px;
+      }
+      .sec03 p,
+      .sec04 p,
+      .sec05 h3{
+        font-size:12px;
+      }
+      .sec03 .news .art-txt p:first-child{
+        width:180px;
+      }
+      .sec05 .service h3{
+        text-align:center;
+      }
+      .sec05 .service p{
+        display:none;
+      }
+      .footer .container{
+        grid-template-columns:1fr 1fr;
+        gap:15px;
+      }
+      .f-right{
+        grid-area:1/2/2/2;
+      }
+    }
+
+   
+    @media (max-width:560px){
+      .h-bottom>ul{
+        font-size:10px;
+        padding:6px 20px;
+      }
+      .sec03 .container{
+        grid-template-columns:1fr;
+        gap:200px;
+      }
+      .sec03 .news .art-txt p:first-child{
+        width:260px;
+      }
+      .sec04 .product{
+        grid-template-columns:repeat(4,1fr);
+        gap:50px;
+      }
+    }
+
+    @media (max-width:460px){
+      .sec04 .product{
+        gap:40px;
+      }
+      .sec04 .product .img-box img{
+        width:50px;
+        height:50px;
+      }
+      .footer .container{
+        display:block;
+      }
+      .f-left,
+      .f-center{
+        padding-bottom:20px;
+      }
+    }
+
+
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <h1>
-        <a href="./index.html">우리은행</a>
-      </h1>
-      <div class="h-top">
-        <ul>
-          <li title="전체메뉴">
-            <a href="#">전체메뉴 버튼</a>
-          </li>
-          <li title="로그인">
-            <a href="#">로그인</a>
-          </li>
-          <li title="인증센터">
-            <a href="#">인증센터</a>
-          </li>
-          <li title="언어변경">
-            <a href="#">언어</a>
-          </li>
-          <li title="검색">
-            <a href="#">검색</a>
-          </li>
-        </ul>
+  <section id="wrap">
+    <header class="header">
+      <h1>우리은행</h1>
+      <div class="all-menu">
+        <div class="all-nav">
+          <div class="menu-close">
+            <img src="./images/btn-close.svg" alt="닫기">
+          </div>
+          <div class="main-nav">
+            <span>개인</span>
+            <div class="arrow-wrap">
+              <span class="arrow-top">˄</span>
+              <span class="arrow-bottom">˅</span>
+            </div>
+          </div>
+          <div class="sub-nav">
+            <span>조회</span>
+            <br>
+            <span>이체</span>
+            <br>
+            <span>오픈뱅킹</span>
+            <br>
+            <span>공과금</span>
+            <br>
+            <span>예금/신탁</span>
+            <br>
+            <span>펀드</span>
+            <br>
+            <span>퇴직연금</span>
+            <br>
+            <span>보험</span>
+            <br>
+            <span>대출</span>
+            <br>
+            <span>외환/골드</span>
+            <br>
+            <span>뱅킹관리</span>
+            <br>
+            <span>ISA</span>
+          </div>
+          <div class="main-nav">
+            <span>기업</span>
+            <div class="arrow-wrap">
+              <span class="arrow-top">˄</span>
+              <span class="arrow-bottom">˅</span>
+            </div>
+          </div>
+          <div class="sub-nav">
+            <span>조회</span>
+            <br>
+            <span>이체</span>
+            <br>
+            <span>전자결제</span>
+            <br>
+            <span>외환</span>
+            <br>
+            <span>뱅킹</span>
+            <br>
+            <span>금융상품</span>
+            <br>
+            <span>자금관리</span>
+            <br>
+            <span>기업서비스</span>
+            <br>
+            <span>뱅킹관리</span>
+            <br>
+            <span>퇴직연금</span>
+          </div>
+          <div class="main-nav">
+            <span>금융상품</span>
+            <div class="arrow-wrap">
+              <span class="arrow-top">˄</span>
+              <span class="arrow-bottom">˅</span>
+            </div>
+          </div>
+          <div class="sub-nav">
+            <span>추천상품</span>
+            <br>
+            <span>예금</span>
+            <br>
+            <span>대출</span>
+            <br>
+            <span>외환</span>
+            <br>
+            <span>펀드</span>
+            <br>
+            <span>신탁</span>
+            <br>
+            <span>보험</span>
+            <br>
+            <span>퇴직연금</span>
+            <br>
+            <span>골드</span>
+            <br>
+            <span>ISA</span>
+          </div>
+          <div class="main-nav">
+            <span>기타서비스</span>
+            <div class="arrow-wrap">
+              <span class="arrow-top">˄</span>
+              <span class="arrow-bottom">˅</span>
+            </div>
+          </div>
+          <div class="sub-nav last-sub-nav">
+            <div class="left">
+              <span>마이데이터</span>
+              <br>
+              <span>자산관리</span>
+              <br>
+              <span>펀드센터</span>
+              <br>
+              <span>보험센터</span>
+              <br>
+              <span>대출센터</span>
+              <br>
+              <span>외환센터</span>
+              <br>
+              <span>주택도시기금</span>
+              <br>
+              <span>퇴직연금</span>
+              <br>
+              <span>노란우산</span>
+              <br>
+              <span>우리에스크로</span>
+            </div>
+            <div class="right">
+              <span>스마트금융</span>
+              <br>
+              <span>투체어스PB</span>
+              <br>
+              <span>이벤트</span>
+              <br>
+              <span>고객광장</span>
+              <br>
+              <span>은행소개/IR</span>
+              <br>
+              <span>우리사랑e나눔터</span>
+              <br>
+              <span>부동산</span>
+              <br>
+              <span>우리이야기</span>
+              <br>
+              <span>우리은행 메타버스</span>
+            </div>
+          </div>
+          <div class="box">
+            <div class="login-box sorry-confirm">
+              <span>로그인</span>
+            </div>
+            <div class="certification-box sorry-confirm">
+              <span>인증센터</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="h-bottom">
+      <div class="container">
+        <div class="h-top clearfix">
+          <div class="center">
+            <ul class="sorry-confirm">
+              <li title="로그인">
+                <a href="#">로그인</a>
+              </li>
+              <li title="인증센터">
+                <a href="#">인증센터</a>
+              </li>
+            </ul>
+            <div class="logo-box">
+              <a href="./index.html"><img src="./images/logo.png" alt="우리은행 로고"></a>
+            </div>
+            <ul class="sorry-confirm">
+              <li title="계좌조회">
+                <a href="#">조회</a>
+              </li>
+              <li title="계좌이체">
+                <a href="#">이체</a>
+              </li>
+            </ul>
+          </div>
+          <div class="side">
+            <ul title="전체메뉴">
+              <li class="menu-open active">
+                <a href="#"><img src="./images/btn-nav.svg" alt="전체메뉴"></a>
+              </li>
+            </ul>
+            <ul title="language">
+              <li class="btn-lang active">
+                <a href="#"><img src="./images/btn-lang.svg" alt="언어"></a>
+              </li>
+            </ul>
+          </div>
+          <div class="lang-box">
+            <div class="box">
+              <h2>Language</h2>
+              <button class="lang-close">X</button>
+              <select>
+                <option>한국어</option>
+                <option>English</option>
+                <option>中國語</option>
+                <option>日本語</option>
+                <option>tagalog</option>
+                <option>Tiếng Việt</option>
+                <option>Монгол хэл</option>
+              </select>
+              <input type="submit" value="SUBMIT">
+            </div>
+          </div>
+        </div>       
+      </div>
+      <nav class="h-bottom">
         <ul>
           <li>
             <a href="#">개인</a>
@@ -63,15 +806,460 @@
             <a href="#">제휴제안</a>
           </li>
         </ul>
+      </nav>
+    </header>
+    <section class="sec sec01">
+      <div class="video-box active">
+        <video src="./media/media-epigyny.mp4" muted autoplay loop></video>
+        <div class="video-control">
+          <button type="button" class="video-play-stop" id="btn-video" title="비디오">멈춤</button>
+          <button type="button" class="audio-play-stop" id="btn-audio" title="오디오">켜기</button>
+        </div>
       </div>
-    </div>
-  </header>
-
-
-
-
-
+    </section>
+    <section class="sec sec02">
+      <div class="container">
+        <div class="search">
+          <input type="search" placeholder="검색어를 입력하세요">
+          <img src="./images/btn-search.svg" alt="검색버튼">
+        </div>
+      </div>
+    </section>
+    <section class="sec sec03">
+      <div class="container">
+        <div class="event">
+          <h2>이벤트</h2>
+          <!-- Swiper -->
+          <div class="swiper event-swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <article class="art art01">
+                  <div class="img-box">
+                    <img src="./images/img-event01.jpg" alt="기대평 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                      <p>기간 : 23.12.12 ~ 24.01.16</p>
+                    </a>
+                  </div>
+                </article>
+              </div>
+              <div class="swiper-slide">
+                <article class="art art02">
+                  <div class="img-box">
+                    <img src="./images/img-event02.png" alt="61년생 고객님 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                      <p>기간 : 23.12.06 ~ 24.01.31</p>
+                    </a>
+                  </div>
+                </article>
+              </div>
+              <div class="swiper-slide">
+                <article class="art art03">
+                  <div class="img-box">
+                    <img src="./images/img-event03.png" alt="TDF 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                      <p>기간 : 23.11.01 ~ 24.01.31</p>
+                    </a>
+                  </div>
+                </article>
+              </div>
+              <div class="swiper-slide">
+                <article class="art art04">
+                  <div class="img-box">
+                    <img src="./images/img-event04.jpg" alt="청소년 금융바우처 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                      <p>기간 : 24.01.01 ~ 24.12.31</p>
+                    </a>
+                  </div>
+                </article>
+              </div>
+              <div class="swiper-slide">
+                <article class="art art05">
+                  <div class="img-box">
+                    <img src="./images/img-event05.jpg" alt="환전주머니 서비스 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                      <p>기간 : 23.03.28 ~ 24.03.31</p>
+                    </a>
+                  </div>
+                </article> 
+              </div>
+              <div class="swiper-slide">
+                <article class="art art06">
+                  <div class="img-box">
+                    <img src="./images/img-event06.jpg" alt="영유아 금융바우처 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                    <p>기간 : 24.01.01 ~ 24.12.31</p>
+                    </a>
+                  </div>
+                </article> 
+              </div>
+              <div class="swiper-slide">
+                <article class="art art07">
+                  <div class="img-box">
+                    <img src="./images/img-event07.png" alt="청년 금융바우처 이벤트">
+                  </div>
+                  <div class="txt-box">
+                    <a href="#">
+                    <p>기간 : 24.01.01 ~ 24.12.31</p> 
+                    </a>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+        <div class="news">
+          <h2>새소식</h2>
+          <article class="art-txt clearfix">
+            <p class="sorry-confirm">[공지] 수신상품 금리 변경 안내</p>
+            <p>2024.01.03</p>
+          </article>
+          <article class="art-txt clearfix">
+            <p class="sorry-confirm">[공지] 정기예금 및 정기적금 중도해지이율 변경안내</p>
+            <p>2023.12.29</p>
+          </article>
+          <article class="art-txt clearfix">
+            <p class="sorry-confirm">[공지] 모바일 · 인터넷뱅킹 타행이체 수수료, 타행자동이체 수수료 전액 면제 안내</p>
+            <p>2023.12.29</p>
+          </article>
+          <article class="art-txt clearfix">
+            <p class="sorry-confirm">[채용] 2023년 하반기 우리은행 신입행원 채용 최종 합격자 발표</p>
+            <p>2023.12.12</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="sec sec04">
+      <div class="container">
+        <h2>금융상품</h2> 
+        <div class="product sorry-confirm">
+          <div class="img-box">
+            <img src="./images/icon01-savings.png" alt="예금">
+            <p>예금</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon02-loan.png" alt="대출">
+            <p>대출</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon03-fund.png" alt="펀드">
+            <p>펀드</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon04-exchange.png" alt="외환">
+            <p>외환</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon05-trust.png" alt="신탁">
+            <p>신탁</p>
+          </div>
+          <div class="img-box" title="퇴직연금">
+            <img src="./images/icon06-retirement.png" alt="퇴직연금">
+            <p>연금</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon07-insurance.png" alt="보험">
+            <p>보험</p>
+          </div>
+          <div class="img-box">
+            <img src="./images/icon08-isa.png" alt="ISA">
+            <p>ISA</p>
+          </div>
+        </div>
+        <!-- <div class="card">
+          <h2>카드</h2>
+          <div class="img-box">
+            <a href="#"><img src="./images/icon-card01.png" alt="카드신청"></a>
+            <p>카드신청</p>
+          </div>
+          <div class="img-box">
+            <a href="#"><img src="./images/icon-card02.png" alt="나의카드"></a>
+            <p>나의카드</p>
+          </div>
+          <div class="img-box">
+            <a href="#"><img src="./images/icon-card03.png" alt="이벤트"></a>
+            <p>이벤트</p>
+          </div>
+        </div> -->
+      </div>
+    </section>
+    <section class="sec sec05">
+      <div class="container">
+        <h2>서비스</h2>
+        <div class="service">
+          <article class="art art01">
+            <div class="img-box sorry-confirm"><img src="./images/img-service01.png" alt="우리WON뱅킹"></div>
+            <h3>우리WON뱅킹</h3>
+            <p>새 시대의 금융을 켜다, 우리은행 대표 모바일뱅킹 APP</p>
+          </article>
+          <article class="art art02">
+            <div class="img-box sorry-confirm"><img src="./images/img-service02.png" alt="마이데이터"></div>
+            <h3>마이데이터</h3>
+            <p>나의 데이터가 가치가 되는 새로운 경험을 체험해 보세요</p>
+          </article>
+          <article class="art art03">
+            <div class="img-box sorry-confirm"><img src="./images/img-service03.png" alt="스마트 간편신규"></div>
+            <h3>스마트 간편신규</h3>
+            <p>직원에게 추천받으신 상품을 간편하게 가입하세요</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <aside class="btn-up">
+      <div class="img-box"><img src="./images/btn-up.svg" alt="상단으로"></div>
+    </aside>
+    <footer class="footer">
+      <div class="container">
+        <div class="f-left">
+          <div class="img-box">
+            <div class="logo-box">
+              <img src="./images/logo.png" alt="우리은행">
+            </div>
+            <div class="awards-box">
+              <img src="./images/icon-web.png" alt="우수사이트" title="2023 웹 접근성 우수사이트">
+              <img src="./images/icon-csm.gif" alt="고객만족경영" title="2019 고객감동경영대상 종합대상 12년 연속 수상">
+              <img src="./images/icon-awards.png" alt="은행 수상" title="The Banker Awards 2020 우리은행 3관상 수상">
+            </div>
+          </div>
+          <p>1588-5000</p>
+        </div>
+        <div class="f-center">
+          <div class="sns">
+            <ul>
+              <li title="인스타그램">
+                <a href="https://www.instagram.com/wooribank_kr/">
+                  <img src="./images/icon-instagram-gray.png" alt="인스타그램">
+                </a>
+              </li>
+              <li title="유튜브">
+                <a href="https://www.youtube.com/user/wooribank">
+                  <img src="./images/icon-youtube-gray.png" alt="유튜브">
+                </a>
+              </li>
+              <li title="페이스북">
+                <a href="https://www.facebook.com/wooribank">
+                  <img src="./images/icon-facebook-gray.png" alt="페이스북">
+                </a>
+              </li>
+              <li title="NAVER 포스트">
+                <a href="https://m.post.naver.com/woori_official">
+                  <img src="./images/icon-post-naver-gray.png" alt="네이버 포스트">
+                </a>
+              </li>
+              <li title="NAVER TV">
+                <a href="https://tv.naver.com/wooribanktv">
+                  <img src="./images/icon-navertv-gray.png" alt="네이버 티비">
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="family-site">
+            <form action="#">
+              <select>
+                <option value="패밀리사이트">패밀리사이트</option>
+                <option value="우리금융지주">우리금융지주</option>
+                <option value="우리펀드서비스">우리펀드서비스</option>
+                <option value="우리카드">우리카드</option>
+                <option value="우리IPE">우리IPE</option>
+                <option value="우리금융캐피탈">우리금융캐피탈</option>
+                <option value="우리글로벌자산운용">우리글로벌자산운용</option>
+                <option value="우리종합금융">우리종합금융</option>
+                <option value="우리FIS">우리FIS</option>
+                <option value="우리자산신탁">우리자산신탁</option>
+                <option value="우리금융경영연구소">우리금융경영연구소</option>
+                <option value="우리자산운용">우리자산운용</option>
+                <option value="우리다문화장학재단">우리다문화장학재단</option>
+                <option value="우리금융저축은행">우리금융저축은행</option>
+                <option value="우리미소금융재단">우리미소금융재단</option>
+                <option value="우리신용정보">우리신용정보</option>
+              </select>
+            </form>
+          </div>
+        </div>
+        <div class="f-right">
+          <div class="link-txt">
+            <ul>
+              <li><a href="#">은행소개</a></li>
+              <li><a href="#">영업점안내</a></li>
+              <li><a href="#">고객광장</a></li>
+              <li><a href="#"><strong>개인정보처리방침</strong></a></li>
+              <li><a href="#"><strong>신용정보활용체제</strong></a></li>
+              <li><a href="#">개인신용정보관리보호</a></li>
+              <li><a href="#">사고신고</a></li>
+              <li><a href="#">전자민원접수</a></li>
+              <li><a href="#">보호금융상품등록부</a></li>
+              <li><a href="#">상품공시실</a></li>
+              <li><a href="#">보안센터</a></li>
+              <li><a href="#">웹접근성 이용안내</a></li>
+            </ul>
+          </div>
+          <br>
+          <p>COPYRIGHTS WOORI BANK. ALL RIGHTS RESERVED.</p>
+        </div>
+      </div>
+    </footer>
+  </section>
   <script src="js/jquery.min.js"></script>
   <script src="js/swiper-bundle.min.js"></script>
+  <script>
+    let allMenu = document.querySelector('.all-menu');
+    let menuOpen = document.querySelector('.menu-open');
+    let menuClose = document.querySelector('.menu-close');
+    let langBox = document.querySelector('.lang-box');
+    let langOpen = document.querySelector('.btn-lang');
+    let langClose = document.querySelector('.lang-close');
+    let sorryConfirm = document.querySelectorAll('.sorry-confirm');
+
+    // 메뉴 open, close
+    menuOpen.onclick = function(){
+      fnOpen(allMenu);
+    } 
+    menuClose.onclick = function(){
+      fnClose(allMenu);
+    }
+    function fnOpen(el){
+      el.classList.add('active');
+    }
+    function fnClose(el){
+      el.classList.remove('active');
+    }
+
+    // 언어변경 open, close
+    langOpen.onclick = function(){
+      fnOpen(langBox);
+    } 
+    langClose.onclick = function(){
+      fnClose(langBox);
+    }
+    function fnOpen(el){
+      el.classList.add('active');
+    }
+    function fnClose(el){
+      el.classList.remove('active');
+    }
+
+    // 준비중 확인창
+    for(let idx=0;idx<=sorryConfirm.length-1;idx++){
+      sorryConfirm[idx].onclick = function(){
+        fnLoginOpen();
+      }
+    }
+
+    function fnLoginOpen(){
+      let scfValue = confirm('현재 페이지는 준비중입니다.\n이용에 불편을 드려 죄송합니다.');
+    }
+
+    // all-menu 클릭 시 open, close
+
+    // main-nav랑 sub-nav
+    $('.main-nav').click(function() {
+      $(this).next('.sub-nav').stop().slideToggle(300);
+      $(this).toggleClass('on').siblings().removeClass('on');
+      $(this).next('.sub-nav').siblings('.sub-nav').slideUp(300); // 1개씩 펼치기
+    });
+
+
+    // 스크롤 시 h-bottom 사라짐
+    $(window).scroll(function(){
+      if($(this).scrollTop()>50){
+        $('.h-bottom').hide();
+      }else{
+        $('.h-bottom').show();
+        }
+      });
+
+    // 비디오 멈춤 함수
+    function videoStop(){          
+      $('video')[0].pause();
+      $('#btn-video').text('재생');
+    }
+    // 비디오 재생 함수
+    function videoPlay(){
+      $('.active video')[0].play();
+      $('#btn-video').text('멈춤');
+    }
+    // 오디오 재생 함수
+    function audioPlay(){
+      $('.active video').prop('muted',false);      
+      $('#btn-audio').text('끄기');
+    }
+    // 오디오 멈춤 함수
+    function audioStop(){
+      $('video').prop('muted',true);      
+      $('#btn-audio').text('켜기');
+    }
+
+    // 비디오 멈춤 재생 함수
+    function fnVideoSP(el){
+      if($(el).text()=='멈춤'){
+        videoStop();
+      }else{
+        videoPlay();
+      }
+    }
+
+
+    // 비디오 멈춤 재생 버튼 이벤트
+    $('#btn-video').click(function(){
+      fnVideoSP(this);
+    })
+    
+    // 사운드 멈춤 재생 버튼 이벤트
+    $('#btn-audio').click(function(){
+      if($(this).text()=='켜기'){
+        audioPlay();
+      }else{
+        audioStop();
+      }
+    })
+
+
+    // sec03 event 스와이퍼
+    const secThreeEventSwiper = new Swiper(".event-swiper", {
+      grabCursor: true,
+      effect: "creative",
+      pagination: {
+        el: ".swiper-pagination",
+        type: "fraction",
+      },
+      creativeEffect: {
+        prev: {
+          translate: [0, 0, -200],
+        },
+        next: {
+          translate: ["100%", 0, 0],
+        },
+      },
+      autoplay:{
+        delay:1200,
+      }
+    });
+
+    // btn-up 효과
+    $(window).scroll(function(){
+      if($(this).scrollTop()>1000){
+        $('.btn-up').fadeIn();
+      }else{
+        $('.btn-up').fadeOut();
+      }
+    })
+    $('.btn-up').click(function(){
+      event.preventDefault();
+      $('html, body').animate({scrollTop:0},300);     
+    });
+
+  </script>
 </body>
 </html>
