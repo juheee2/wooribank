@@ -40,6 +40,8 @@
 + 폰트
    : 'Noto Serif KR-Regular', 'Noto Serif KR-SemiBold' (우리은행 로고처럼 serif 폰트를 사용하여 통일성을 줌)
 
+### 📌 와이어프레임
+![와이어프레임](https://github.com/juheee2/wooribank/blob/main/%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89%20%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84.jpg)
 
 ### 📌 BEFORE & AFTER
 ![before & after](https://github.com/juheee2/wooribank/blob/main/%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89%20%EB%A6%AC%EB%89%B4%EC%96%BC%20%EB%B9%84%EA%B5%90.png)
