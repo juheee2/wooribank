@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="./css/reset.css">
   <!-- <link rel="stylesheet" href="css/fonts.css"> -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="./css/swiper-bundle.min.css">
   <title>우리은행</title>
   <style>
     :root{
@@ -15,12 +15,27 @@
       --sub-color:#0067ac;
       --color-fff:#fff;
       --color-666:#333;
-
       font-family:'Noto Serif KR';
       font-weight:400;
       font-size:14px;
       color:var(--color-666);
       line-height:1.2;
+    }
+    #skip-menu a{
+      display:inline-block;
+      padding:20px;
+      background:var(--color-666);
+      color:var(--color-fff);
+      font-size:25px;
+      font-weight:600;
+      position:fixed;
+      top:0;
+      left:50%;
+      transform:translate(-50%,-100%);
+      z-index:100000;
+    }
+    #skip-menu a:focus{
+      transform:translate(-50%,0);
     }
     #wrap{
       overflow:hidden;
@@ -150,6 +165,10 @@
       grid-template-columns:auto auto;
       gap:50px;
     }
+    .h-top li>a:hover{
+      color:var(--main-color);
+      font-weight:600;
+    }
     .h-top .side{
       display:grid;
       grid-template-columns:auto auto;
@@ -220,6 +239,50 @@
       color:var(--color-fff);
       padding:6px 150px;
       font-size:12px;
+    }
+    .h-bottom li>a:hover{
+      /* text-decoration:underline; */
+      /* text-decoration:overline underline; */
+      color:var(--color-666);
+      font-weight:600;
+    }
+    /* .h-bottom-nav>li>a{
+      border-bottom:3px solid transparent;
+      padding-bottom:10px;
+    }
+    .h-bottom>li>a.active{
+      border-bottom-color:var(--color-666);
+    } */
+    .popup{
+      display:none;
+      position:fixed;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      z-index:10;
+      width:500px;
+    }
+    .popup .container{
+      width:auto;
+    }
+    .popup h2{
+      display:none;
+    }
+    .popup .btn{
+      display:flex;
+    }
+    .popup .btn button{
+      border:none;
+      padding:10px;
+      background:#fff;
+      cursor:pointer;
+    }
+    .popup button:first-child{
+      width:50%;
+      border-right:1px solid #999;
+    }
+    .popup button:last-child{
+      width:50%;
     }
     .sec01 .video-box{
       position:relative;
@@ -390,9 +453,8 @@
       width:30px;
       cursor:pointer;
     }
-    .footer{
-      /* color:var(--color-fff ); */
-      /* background:var(--sub-color); */
+    aside .back-github{
+      margin-top:10px;
     }
     .footer .container{
       display:grid;
@@ -554,6 +616,9 @@
     }
 
     @media (max-width:460px){
+      .lang-box .box{
+        width:300px;
+      }
       .sec04 .product{
         gap:40px;
       }
@@ -574,6 +639,7 @@
   </style>
 </head>
 <body>
+  <div id="skip-menu"><a href="#main">본문 바로가기</a></div>
   <section id="wrap">
     <header class="header">
       <h1>우리은행</h1>
@@ -808,6 +874,16 @@
         </ul>
       </nav>
     </header>
+    <section class="sec popup" id="popup">
+      <div class="container">
+        <h2>소상공인 맞춤 무료 컨설팅</h2>
+        <div class="img-box"><a href="#"><img src="./images/popup01.png" alt="소상공인 맞춤 무료 컨설팅"></a></div>
+        <div class="btn">
+          <button id="day-close">하루동안 보지 않기</button>
+          <button id="now-close">닫기</button>
+        </div>
+      </div>
+    </section>
     <section class="sec sec01">
       <div class="video-box active">
         <video src="./media/media-epigyny.mp4" muted autoplay loop></video>
@@ -825,7 +901,7 @@
         </div>
       </div>
     </section>
-    <section class="sec sec03">
+    <section class="sec sec03" id="main">
       <div class="container">
         <div class="event">
           <h2>이벤트</h2>
@@ -1017,8 +1093,19 @@
         </div>
       </div>
     </section>
-    <aside class="btn-up">
-      <div class="img-box"><img src="./images/btn-up.svg" alt="상단으로"></div>
+    <aside>
+      <div class="btn-up">
+        <div class="img-box"><img src="./images/btn-up.svg" alt="상단으로"></div>
+      </div>
+      <div class="back-github">
+        <div class="img-box">
+          <a href="https://github.com/juheee2/wooribank">
+            <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+              <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
     </aside>
     <footer class="footer">
       <div class="container">
@@ -1090,7 +1177,7 @@
         </div>
         <div class="f-right">
           <div class="link-txt">
-            <ul>
+            <ul class="sorry-confirm">
               <li><a href="#">은행소개</a></li>
               <li><a href="#">영업점안내</a></li>
               <li><a href="#">고객광장</a></li>
@@ -1111,8 +1198,9 @@
       </div>
     </footer>
   </section>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/swiper-bundle.min.js"></script>
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/swiper-bundle.min.js"></script>
+  <script src="./js/jquery.cookie.min.js"></script>
   <script>
     let allMenu = document.querySelector('.all-menu');
     let menuOpen = document.querySelector('.menu-open');
@@ -1121,8 +1209,32 @@
     let langOpen = document.querySelector('.btn-lang');
     let langClose = document.querySelector('.lang-close');
     let sorryConfirm = document.querySelectorAll('.sorry-confirm');
+    
+    
+    // fnCookie();
+    // // 쿠키함수
+    // function fnCookie(){
+    //   let popupValue = $.cookie('popup');
+    //   if(popupValue=='no'){
+    //     fnClose($('#popup'));
+    //   }else{
+    //     $('#popup').stop().show()
+    //   };
+    // }
+    // // popup close, 1일동안 close
+    // $(function(){
+    //   $('#now-close').click(function(){
+    //     fnClose($('#popup'));
+    //   });
+    //   $('#day-close').click(function(){
+    //     $.cookie('popup','no',{path:'/',expires:1});
+    //     fnClose($('#popup'));
+    //   });
+    // })
+    
 
-    // 메뉴 open, close
+
+    // all-menu 클릭 시 open, close
     menuOpen.onclick = function(){
       fnOpen(allMenu);
     } 
@@ -1150,6 +1262,8 @@
       el.classList.remove('active');
     }
 
+
+
     // 준비중 확인창
     for(let idx=0;idx<=sorryConfirm.length-1;idx++){
       sorryConfirm[idx].onclick = function(){
@@ -1161,7 +1275,6 @@
       let scfValue = confirm('현재 페이지는 준비중입니다.\n이용에 불편을 드려 죄송합니다.');
     }
 
-    // all-menu 클릭 시 open, close
 
     // main-nav랑 sub-nav
     $('.main-nav').click(function() {
@@ -1248,7 +1361,7 @@
     });
 
     // btn-up 효과
-    $(window).scroll(function(){
+    $(window).scroll(function(){      
       if($(this).scrollTop()>1000){
         $('.btn-up').fadeIn();
       }else{
